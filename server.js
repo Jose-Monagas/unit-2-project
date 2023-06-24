@@ -1,1 +1,1 @@
-require("dotenv").config(); // pulls stuff from .env and makes it available to me
+require("dotenv").config(); // pulls environment variables from .env and makes it available to me
