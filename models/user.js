@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema( // schema to create new users, each user
 );
 
 userSchema.pre("save", async function (next) {
+  // every time the docs get saved, we want to check if the password was updated
   this.isModified("password") // when the user password gets updated, we want bcrypt to hash the new password
     ? (this.password = await bcrypt.hash(this.password, 8))
     : null;
@@ -25,6 +26,6 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.generateAuthToken = async function () {
-  const token = jwt.sign({ _id: this._id }, process.env.SECRET); // we can call on this method to generate a token
+  const token = jwt.sign({ _id: this._id }, process.env.SECRET); // we can call on this method to generate a token every time we need it
   return token;
 };
