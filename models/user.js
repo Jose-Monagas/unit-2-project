@@ -32,4 +32,4 @@ userSchema.methods.generateAuthToken = async function () {
 
 const User = mongoose.model("User", userSchema); // creates a model that provides an interface with mongodb collection to perform CRUD operations
 
-modules.exports = User; // exports the User model as a module, making it available for other parts of the application to import and use.
+modules.exports = User; // exports the User model as a module, making it available for other parts of the application to import and use..
