@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema( // schema to create new users, each user
     age: { type: Number, required: false },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    todos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Todo" }], // this ref will point to the 'Todo' string collection in the todo.js
   },
   {
     timestamps: true,
