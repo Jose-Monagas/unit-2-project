@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema( // schema to create new users, each user
 );
 
 userSchema.pre("save", async function (next) {
-  // before the docs get saved int the database, we want to check if the password was updated
+  // before the docs get saved in the database, we want to check if the password was updated
   this.isModified("password") // when the user password gets updated, we want bcrypt to hash the new password before it's saved
     ? (this.password = await bcrypt.hash(this.password, 8))
     : null;
