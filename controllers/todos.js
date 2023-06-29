@@ -7,7 +7,7 @@ exports.create = async function (req, res) {
     const todo = await Todo.create(req.body);
     req.user.todos // does the user have any todos ?
       ? req.user.todos.addToSet({ _id: todo._id }) // if it does then add the new to do to that list
-      : (req.user.todos = [{ _id: todo._id }]); // if it does not then create a new array and drop todo._id there
+      : (req.user.todos = [{ _id: todo._id }]); // if it does not exist then create a new array and drop todo._id there
     await req.user.save(); // save the changes to the database
     res.json(todo);
   } catch (error) {
