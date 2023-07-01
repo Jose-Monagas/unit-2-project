@@ -58,8 +58,8 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     await req.user.deleteOne(); // we have a req.user because we took it out of the token and saved it in user
-    res
-      .status(200) //change to 204 status ****
-      .send("Request processed successfully, user has been deleted");
-  } catch (error) {}
+    res.sendStatus(200);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };

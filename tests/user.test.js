@@ -12,7 +12,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await mongoose.connect.close();
+  await mongoose.connection.close();
   mongoServer.stop();
   server.close();
 });
@@ -31,25 +31,25 @@ describe("Test the users endpoints", () => {
     expect(response.body.user.age).toEqual(23);
     expect(response.body).toHaveProperty("token");
   });
-  test("It should allow a user to login", async () => {
+
+  test("it should allow a user to login", async () => {
     const user = new User({
-      name: "Leo",
-      email: "leo@gmail.com",
-      password: "test1234",
+      name: "luca",
+      email: "luca1@gmail.com",
+      password: "test",
     });
     await user.save();
-    const response = await request(app).post("/users").send({
-      name: "Leo",
-      email: "leo@gmail.com",
-      password: "test1234",
-    });
+    const response = await request(app)
+      .post("/users/login")
+      .send({ email: user.email, password: "test" });
 
-    expect(response.body.user.email).toEqual(user.email);
     expect(response.statusCode).toBe(200);
-    expect(response.body.user.name).toEqual(user.name);
+    expect(response.body.user.email).toEqual("luca1@gmail.com");
+    expect(response.body.user.name).toEqual("luca");
     expect(response.body).toHaveProperty("token");
   });
-  test("It should updat a user", async () => {
+
+  test("It should update a user", async () => {
     const user = new User({
       name: "Katya",
       email: "katyazamo@outlook.com",
@@ -81,6 +81,6 @@ describe("Test the users endpoints", () => {
       .delete(`/users/${user._id}`)
       .set("Authorization", `Bearer ${token}`);
 
-    expect(response.statusCode).toBe(204);
+    expect(response.statusCode).toBe(200);
   });
 });

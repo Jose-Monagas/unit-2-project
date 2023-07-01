@@ -71,9 +71,7 @@ exports.update = async function (req, res) {
 exports.delete = async function (req, res) {
   try {
     const todos = await Todo.findOneAndDelete({ _id: req.params.id });
-    res
-      .status(200)
-      .send("Request processed successfully, todo has been deleted");
+    res.sendStatus(204);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
