@@ -1,13 +1,15 @@
 const Todo = require("../models/todo"); // everything here will happen for authenticated users so we'll always know what req.user is
 const User = require("../models/user");
+
 // Create a todo
 exports.create = async function (req, res) {
   try {
-    req.body.user = req.user._id;
+    req.body.userEmail = req.user.email;
     const todo = await Todo.create(req.body);
     req.user.todos // does the user have any todos ?
       ? req.user.todos.addToSet({ _id: todo._id }) // if it does then add the new to do to that list
       : (req.user.todos = [{ _id: todo._id }]); // if it does not exist then create a new array and drop todo._id there
+    await todo.save(); // needs to be saved before saving the user
     await req.user.save(); // save the changes to the database
     res.json(todo);
   } catch (error) {
