@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 exports.auth = async (req, res, next) => {
   // to make sure the user is authorized to do something
   try {
-    const token = req.header("Authorization").replace("Bearer", ""); // take the token out of the authorization header
+    const token = req.header("Authorization").replace("Bearer ", ""); // take the token out of the authorization header
     const data = jwt.verify(token, process.env.SECRET); // verify that the token it's valid. if it's valid then we get the id of the user
     const user = await User.findOne({ _id: data._id }); // we're going to take the id inside the jwt and use it to lookup the user in the database
     if (!user) {
@@ -46,21 +46,20 @@ exports.loginUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const updates = Object.keys(req.body); // we make an array of all the keys of all the things we want to change about the user, req.body is an object with a bunch of keys in it
-    //because in order to update the user needs to be authenticated, we already have the req.user from the authentication part
-    updates.forEach((update) => (req.user[update] = req.body[update])); // we call for each on the keys array, take that particular in the user and change it for the data inside req.body
-    await req.user.save(); // save user with the changes made in the database
-    res.json({ user });
+    const updates = Object.keys(req.body);
+    const user = await User.findOne({ _id: req.params.id });
+    updates.forEach((update) => (user[update] = req.body[update]));
+    await user.save();
+    res.json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
-
 exports.deleteUser = async (req, res) => {
   try {
     await req.user.deleteOne(); // we have a req.user because we took it out of the token and saved it in user
     res
-      .status(200)
+      .status(200) //change to 204 status ****
       .send("Request processed successfully, user has been deleted");
   } catch (error) {}
 };
