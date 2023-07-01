@@ -29,8 +29,12 @@ exports.show = async function (req, res) {
 // Completed todos
 exports.completedTodo = async function (req, res) {
   try {
-    const todos = await Todo.find({ completed: true, user: req.user._id });
-    res.json(todo);
+    console.log(req.user);
+    const todos = await Todo.find({
+      completed: true,
+      userEmail: req.user.email,
+    });
+    res.json(todos);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -39,8 +43,13 @@ exports.completedTodo = async function (req, res) {
 // Not Completed todos
 exports.notCompletedTodo = async function (req, res) {
   try {
-    const todos = await Todo.find({ completed: false, user: req.user._id });
-    res.json(todo);
+    console.log(req.user);
+    const todos = await Todo.find({
+      completed: false,
+      userEmail: req.user.email,
+    });
+    console.log(todos);
+    res.json(todos);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

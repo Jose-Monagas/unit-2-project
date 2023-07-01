@@ -1,19 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const todoCtrl = require("../controllers/todos");
-const userController = require("../controllers/users");
 
 // Index/ todos
-router.get("/", userController.auth, todoCtrl.notCompletedTodo);
+router.get("/", todoCtrl.notCompletedTodo);
 // Index /todos/completed
-router.get("/completed", userController.auth, todoCtrl.completedTodo);
+router.get("/completed", todoCtrl.completedTodo);
 // Delete /todos/:id
-router.delete("/:id", userController.auth, todoCtrl.delete);
+router.delete("/:id", todoCtrl.delete);
 // Update /todos/:id
-router.put("/:id", userController.auth, todoCtrl.update);
+router.put("/:id", todoCtrl.update);
 // Create /todos
-router.post("/", userController.auth, todoCtrl.create);
+router.post("/", todoCtrl.create);
 // Show /todos/:id
-router.get("/:id", userController.auth, todoCtrl.show);
+router.get("/:id", todoCtrl.show);
 
 module.exports = router;
