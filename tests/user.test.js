@@ -16,7 +16,7 @@ afterAll(async () => {
   mongoServer.stop();
   server.close();
 });
-
+//  TEST USER ENDPOINTS
 describe("Test the users endpoints", () => {
   test("It should create a new user", async () => {
     const response = await request(app).post("/users").send({
@@ -82,5 +82,28 @@ describe("Test the users endpoints", () => {
       .set("Authorization", `Bearer ${token}`);
 
     expect(response.statusCode).toBe(200);
+  });
+});
+
+// TEST TODOS ENDPOINTS
+describe("Test the todos endpoints", () => {
+  test("It should create a new todo", async () => {
+    const user = new User({
+      name: "luca",
+      email: "maria@gmail.com",
+      password: "test",
+    });
+    await user.save();
+    const token = await user.generateAuthToken();
+
+    const response = await request(app)
+      .post("/todos")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ title: "read", completed: true });
+    console.log(response.body);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.title).toEqual("read");
+    expect(response.body.completed).toBe(true);
+    expect(response.body.userEmail).toEqual("maria@gmail.com");
   });
 });
