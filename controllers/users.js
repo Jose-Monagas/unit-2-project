@@ -37,6 +37,9 @@ exports.loginUser = async (req, res) => {
       throw new Error("Invalid login credentials"); // if the user email is not found or the password provided does not match the one in the database
     } else {
       const token = await user.generateAuthToken(); // if we do find the user, we get back a user document on which we can use the generateAuthToken method
+      user.isLoggedIn = true;
+      user.save();
+
       res.json({ user, token });
     }
   } catch (error) {
@@ -59,6 +62,27 @@ exports.deleteUser = async (req, res) => {
   try {
     await req.user.deleteOne(); // we have a req.user because we took it out of the token and saved it in user
     res.sendStatus(200);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.logoutUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+    user.isLoggedIn = false;
+    await user.save();
+    res.json({ message: "User successfully logged out!" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+// get user by their user_id
+exports.getUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+    await user.save();
+    res.json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

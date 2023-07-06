@@ -4,6 +4,7 @@ const { MongoMemoryServer } = require("mongodb-memory-server");
 const app = require("../app");
 const server = app.listen(8080, () => console.log("Let's get ready to test"));
 const User = require("../models/user");
+const Todo = require("../models/todo");
 let mongoServer;
 
 beforeAll(async () => {
@@ -100,10 +101,48 @@ describe("Test the todos endpoints", () => {
       .post("/todos")
       .set("Authorization", `Bearer ${token}`)
       .send({ title: "read", completed: true });
-    console.log(response.body);
+
     expect(response.statusCode).toBe(200);
     expect(response.body.title).toEqual("read");
     expect(response.body.completed).toBe(true);
     expect(response.body.userEmail).toEqual("maria@gmail.com");
+  });
+
+  test("It should show all the todos from a user", async () => {
+    const user = new User({
+      name: "Paula",
+      email: "Paula@gmail.com",
+      password: "test",
+    });
+
+    await user.save();
+    // debugger;
+    console.log(user._id.toString());
+    const token = await user.generateAuthToken();
+
+    const todo = new Todo({
+      title: "chores",
+      userEmail: "Paula@gmail.com",
+      completed: false,
+      priority: 3,
+    });
+
+    await todo.save();
+
+    // Mocking the User.find() method to return the predefined
+    Todo.find = jest.fn().mockResolvedValue(todo);
+
+    // Sending a GET request to the /todos endpoint
+    const response = await request(app)
+      .get("/todos/user/" + user._id.toString())
+      .set("Authorization", `Bearer ${token}`);
+
+    // Asserting the response
+    expect(response.status).toBe(200);
+    expect(response.body.title).toEqual(todo.title);
+    expect(response.body.completed).toEqual(todo.completed);
+    expect(response.body.priority).toEqual(todo.priority);
+    expect(response.body.tags).toEqual(todo.tags);
+    expect(response.body.userEmail).toEqual(todo.userEmail);
   });
 });
