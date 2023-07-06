@@ -69,7 +69,7 @@ exports.deleteUser = async (req, res) => {
 
 exports.logoutUser = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.params.id });
+    user = req.user;
     user.isLoggedIn = false;
     await user.save();
     res.json({ message: "User successfully logged out!" });

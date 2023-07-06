@@ -4,7 +4,7 @@ const userController = require("../controllers/users");
 
 router.post("/", userController.createUser);
 router.post("/login", userController.loginUser);
-router.post("/logout", userController.logoutUser); // new
+router.post("/logout", userController.auth, userController.logoutUser); // new
 router.get("/:id", userController.getUser); // new
 router.put("/:id", userController.auth, userController.updateUser);
 router.delete("/:id", userController.auth, userController.deleteUser);
