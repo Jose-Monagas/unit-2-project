@@ -84,6 +84,36 @@ describe("Test the users endpoints", () => {
 
     expect(response.statusCode).toBe(200);
   });
+
+  test("It should logout a user", async () => {
+    //  create user
+    const user = new User({
+      name: "Leo",
+      email: "leo@gmail.com",
+      password: "lemonada",
+    });
+    await user.save();
+    const token = await user.generateAuthToken();
+    // call /user/login
+    const login = await request(app)
+      .post("/users/login")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ email: user.email, password: "lemonada" });
+
+    // call user/logout
+    let response = await request(app)
+      .post("/users/logout")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toEqual("User successfully logged out!");
+    // call get/user/id to make sure isLoggedIn is set to false
+    response = await request(app)
+      .get("/users/" + user._id.toString())
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.body.isLoggedIn).toEqual(false);
+  });
 });
 
 // TEST TODOS ENDPOINTS
@@ -116,8 +146,7 @@ describe("Test the todos endpoints", () => {
     });
 
     await user.save();
-    // debugger;
-    console.log(user._id.toString());
+
     const token = await user.generateAuthToken();
 
     const todo = new Todo({
