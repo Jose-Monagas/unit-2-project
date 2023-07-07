@@ -114,6 +114,26 @@ describe("Test the users endpoints", () => {
 
     expect(response.body.isLoggedIn).toEqual(false);
   });
+
+  test("It should get a user by their user id", async () => {
+    // create user
+    const user = new User({
+      name: "Ivan",
+      email: "Ivan@gmail.com",
+      password: "lemonada",
+    });
+    await user.save();
+
+    // call get/user/id endpoint
+    response = await request(app).get("/users/" + user._id.toString());
+
+    expect(response.status).toBe(200);
+    expect(response.body.name).toEqual(user.name);
+    expect(response.body.email).toEqual(user.email);
+    expect(response.body.password).toEqual(user.password);
+    expect(response.body.todos).toEqual(user.todos);
+    expect(response.body.isLoggedIn).toEqual(user.isLoggedIn);
+  });
 });
 
 // TEST TODOS ENDPOINTS
