@@ -104,7 +104,11 @@ At this stage, the API does not have a view, the following wireframes will give 
 
 ![task genie landing page](wireframes/landing_page.png)
 
+---
+
 ![create user account](./wireframes/create_account.png)
+
+---
 
 ![create new todo](wireframes/create_todo.png)
 
