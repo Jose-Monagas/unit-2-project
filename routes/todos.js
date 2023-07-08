@@ -4,17 +4,14 @@ const todoCtrl = require("../controllers/todos");
 
 // Create /todos
 router.post("/", todoCtrl.create);
-// Index/ todos
-router.get("/", todoCtrl.getAll);
+// Index/ unfinished todos
 router.get("/unfinished", todoCtrl.notCompletedTodo);
-// Index /todos/completed
-router.get("/completed", todoCtrl.completedTodo);
 // Delete /todos/:id
 router.delete("/:id", todoCtrl.delete);
 // Update /todos/:id
 router.put("/:id", todoCtrl.update);
 // Show /todos/:id
-router.get("/:id", todoCtrl.show);
-router.get("/user/:id", todoCtrl.showAllUserTodos);
+router.get("/:id", todoCtrl.show); // get a specific todo, where id is the todo_id
+router.get("/user/:id", todoCtrl.showAllUserTodos); // get all todos for a user , where id is the user_id
 
 module.exports = router;

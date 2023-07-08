@@ -17,15 +17,6 @@ exports.create = async function (req, res) {
   }
 };
 
-exports.getAll = async function (req, res) {
-  try {
-    const todos = await Todo.find({});
-    res.json(todos);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
 // Find an individual todo
 exports.show = async function (req, res) {
   try {
@@ -47,20 +38,6 @@ exports.showAllUserTodos = async function (req, res) {
   }
 };
 
-// Completed todos
-exports.completedTodo = async function (req, res) {
-  try {
-    console.log(req.user);
-    const todos = await Todo.find({
-      completed: true,
-      userEmail: req.user.email,
-    });
-    res.json(todos);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
 // Not Completed todos
 exports.notCompletedTodo = async function (req, res) {
   try {
@@ -74,7 +51,7 @@ exports.notCompletedTodo = async function (req, res) {
     res.status(400).json({ message: error.message });
   }
 };
-
+// update todo
 exports.update = async function (req, res) {
   try {
     const todos = await Todo.findOneAndUpdate(
@@ -87,7 +64,7 @@ exports.update = async function (req, res) {
     res.status(400).json({ message: error.message });
   }
 };
-
+// delete todo
 exports.delete = async function (req, res) {
   try {
     const todos = await Todo.findOneAndDelete({ _id: req.params.id });

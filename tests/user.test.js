@@ -179,7 +179,7 @@ describe("Test the todos endpoints", () => {
 
     await todo.save();
 
-    // Mocking the User.find() method to return the predefined
+    // // Mocking the User.find() method to return the predefined
     Todo.find = jest.fn().mockResolvedValue(todo);
 
     // Sending a GET request to the /todos endpoint
@@ -286,9 +286,40 @@ describe("Test the todos endpoints", () => {
       .set("Authorization", `Bearer ${token}`)
       .send({ priority: 0, completed: true });
 
-    // console.log(todo);
     expect(response.statusCode).toBe(200);
     expect(response.body.priority).toEqual(0);
     expect(response.body.completed).toEqual(true);
+  });
+
+  test("It should get a todo by the todo id", async () => {
+    // create new user
+    const user = new User({
+      name: "Sam",
+      email: "samantha@gmail.com",
+      password: "test",
+    });
+
+    await user.save();
+    const token = await user.generateAuthToken();
+
+    // create new completed todo
+    const todo = new Todo({
+      title: "Buy detergent",
+      userEmail: "samantha@gmail.com",
+      completed: false,
+      priority: 5,
+    });
+    await todo.save();
+
+    const response = await request(app)
+      .put(`/todos/${todo._id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.title).toEqual(todo.title);
+    expect(response.body.completed).toEqual(todo.completed);
+    expect(response.body.priority).toEqual(todo.priority);
+    expect(response.body.tags).toEqual(todo.tags);
+    expect(response.body.userEmail).toEqual(todo.userEmail);
   });
 });
