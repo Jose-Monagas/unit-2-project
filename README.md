@@ -98,9 +98,9 @@ For example, to create an account follow these steps:
 
 This should create a new user account. One caveat is that in the example I only used the required fields in the user schema for creating a new user account, but there are other fields available to you.
 
-### Wireframe
+### Wireframes
 
-At this stage, the API does not have a view, the following wireframes will give you a sneakpeek of what the front end will might look like
+At this stage, the API does not have a view, the following wireframes will give you a sneakpeek of what the front end might look like
 
 ![task genie landing page](wireframes/landing_page.png)
 
