@@ -64,12 +64,11 @@ exports.completedTodo = async function (req, res) {
 // Not Completed todos
 exports.notCompletedTodo = async function (req, res) {
   try {
-    console.log(req.user);
     const todos = await Todo.find({
       completed: false,
       userEmail: req.user.email,
     });
-    console.log(todos);
+
     res.json(todos);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -83,7 +82,7 @@ exports.update = async function (req, res) {
       req.body,
       { new: true }
     );
-    res.json(todo);
+    res.json(todos);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -92,7 +91,7 @@ exports.update = async function (req, res) {
 exports.delete = async function (req, res) {
   try {
     const todos = await Todo.findOneAndDelete({ _id: req.params.id });
-    res.s(204);
+    res.sendStatus(200);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
