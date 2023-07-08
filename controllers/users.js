@@ -84,6 +84,6 @@ exports.getUser = async (req, res) => {
     await user.save();
     res.json(user);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(404).json({ message: "user not found" });
   }
 };
