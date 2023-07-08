@@ -12,6 +12,7 @@ You must ensure that you have the following packages installed in your machine:
 
 - Node.js
 - Nodemon - globally
+- Postman downloaded in your machine
 
 ### Regular dependencies used
 
